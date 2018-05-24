@@ -22,14 +22,13 @@ namespace ChessProject
             {
                 return Color.white;
             }
-            else if(color == Color.white)
+
+            if(color == Color.white)
             {
-                return Color.white;
+                return Color.black;
             }
-            else
-            {
-                return Color.none;
-            }
+            
+            return Color.none;
         }
     }
 }
