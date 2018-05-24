@@ -25,4 +25,17 @@ namespace ChessProject
         blackPawn = 'p'
 
     }
+
+    static class FigureMethods
+    {
+        public static Color GetColor (this Figure figure)
+        {
+            if (figure == Figure.none)
+            {
+                return Color.none;
+            }
+            return Color.white;
+            //return ()
+        }
+    }
 }
