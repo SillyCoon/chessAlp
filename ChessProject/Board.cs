@@ -142,5 +142,48 @@ namespace ChessProject
             next.GenerateFen(); // Восстанавливаем фен по положению фигур
             return next;
         }
+
+        // Проверка на шах
+        public bool IsCheck()
+        {
+            Board after = new Board(Fen); // Передаем ход
+            after.MoveColor = MoveColor.FlipColor();
+            return after.CanEatKing();
+        }
+
+        private bool CanEatKing()
+        {
+            Square enemyKing = FindEnemyKing(); // Квадрат вражеского короля
+            Moves moves = new Moves(this); // Возможные ходы для данного положения доски
+            foreach(FigureOnSquare fs in YieldFigures()) // Идем по всем фигурам на доске
+            {
+                FigureMoving fm = new FigureMoving(fs, enemyKing); // Если фигура может побить квадрат короля и может двигаться, то шах
+                if (moves.CanMove(fm))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private Square FindEnemyKing()
+        {
+            Figure enemyKing = MoveColor == Color.black ? Figure.whiteKing : Figure.blackKing; // определяем цвет вражеского короля
+            foreach(Square square in Square.YieldSquares()) // по каждому квадрату ищем короля и возвращаем
+            {
+                if (GetFigureAt(square) == enemyKing)
+                {
+                    return square;
+                }
+            }
+            return Square.none;
+        }
+
+        // Есть ли шах после хода
+        public bool IsCheckAfterMove(FigureMoving fm)
+        {
+            Board after = Move(fm);
+            return after.CanEatKing();
+        }
     }
 }

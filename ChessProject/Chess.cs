@@ -39,6 +39,8 @@ namespace ChessProject
             {
                 return this; // Если нет, оставляем ситуацию на доске той же
             }
+            if (Board.IsCheckAfterMove(fm))
+                return this; // Не ходить под шах
             Board nextBoard = Board.Move(fm); // Двигаем фигуру по доске
             Chess nextChess = new Chess(nextBoard); // Новый экземпляр игры
             return nextChess;
@@ -61,7 +63,7 @@ namespace ChessProject
                 foreach (Square to in Square.YieldSquares()) // Для каждого квадрата на доске
                 {
                     FigureMoving fm = new FigureMoving(fs, to); // Создаем двигаемую фигуру на основе всех доступных фигур и квадратов
-                    if (Moves.CanMove(fm)) // Если можем ее двигать
+                    if (Moves.CanMove(fm) && !Board.IsCheckAfterMove(fm)) // Если можем ее двигать и не будет мата
                     {
                         AllMoves.Add(fm); // Добавляем в список
                     }
@@ -79,6 +81,10 @@ namespace ChessProject
                 list.Add(fm.ToString());
             }
             return list;
+        }
+
+        public bool IsCheck() {
+            return Board.IsCheck();
         }
     }
 }

@@ -11,22 +11,26 @@ namespace DemoChess
     {
         static void Main(string[] args)
         {
-
-            Chess chess = new Chess("rnbqkbnr/1p1111p1/8/8/8/8/1P1111P1/RNBQKBNR w KQkq - 0 1");
+            Random random = new Random();
+            Chess chess = new Chess();
+            List<string> movesList;
             while (true)
             {
+                movesList = chess.GetAllMoves();
                 Console.WriteLine(chess.fen);
                 Print(ChessToAscii(chess));
+                Console.WriteLine(chess.IsCheck() ? "CHECK" : "");
                 foreach (string moves in chess.GetAllMoves())
                 {
-                    Console.Write(moves + "\n");
+                    Console.Write(moves + "\t");
                 }
                 Console.WriteLine();
                 Console.Write("> ");
                 string move = Console.ReadLine();
-                if (move == "") {
+                if (move == "q") {
                     break;
                 }
+                if (move == "") move = movesList[random.Next(movesList.Count)];
                 chess = chess.Move(move);
             }
         }

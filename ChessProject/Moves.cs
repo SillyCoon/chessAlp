@@ -91,7 +91,7 @@ namespace ChessProject
             return (FigureMoving.SignX == 0 || FigureMoving.SignY == 0) && CanStraightMove();
         }
 
-        // Может ли фигура идти прямо по диагонали
+        // Может ли фигура идти прямо и по диагонали
         private bool CanStraightMove()
         {
             Square at = FigureMoving.From;
@@ -126,7 +126,6 @@ namespace ChessProject
             return CanPawnGo(stepY) ||
                 CanPawnJump(stepY) ||
                 CanPawnEat(stepY);
-
         }
 
         // Может ли пешка срубить фигуру
