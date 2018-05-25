@@ -33,7 +33,7 @@ namespace ChessProject
         // Может ли фигура перейти на выбранную клетку
         private bool CanMoveTo()
         {
-            return FigureMoving.To.OnBoard() &&
+            return FigureMoving.To.OnBoard() && FigureMoving.From != FigureMoving.To &&
                 Board.GetFigureAt(FigureMoving.To).GetColor() != Board.MoveColor; // Клетка должна существовать и на ней не должно быть фигуры
                                                                                   // того же цвета
         }
@@ -41,7 +41,78 @@ namespace ChessProject
         //  Может ли фигура действительно двигаться (правила для каждой фигуры)
         private bool CanFigureMove()
         {
-            return true;
+            switch (FigureMoving.Figure)
+            {
+                case Figure.none:
+                    return false;
+                case Figure.whiteKing:
+                case Figure.blackKing:
+                    return CanKingMove();
+                case Figure.whiteQueen:
+                case Figure.blackQueen:
+                    return CanStraightMove();
+                case Figure.whiteRook:
+                case Figure.blackRook:
+                    return false;
+                case Figure.whiteBishop:
+                case Figure.blackBishop:
+                    return false;
+                case Figure.whiteKnight:
+                case Figure.blackKnight:
+                    return CanKnightMove();
+                case Figure.whitePawn:
+                case Figure.blackPawn:
+                default: return false;
+            } 
+        }
+
+        private bool CanKingMove()
+        {
+            if(FigureMoving.AbsDeltaX <= 1 && FigureMoving.AbsDeltaY <= 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool CanKnightMove()
+        {
+            if (FigureMoving.AbsDeltaX == 1 && FigureMoving.AbsDeltaY == 2) return true;
+            if (FigureMoving.AbsDeltaY == 1 && FigureMoving.AbsDeltaX == 2) return true;
+            return false;
+        }
+
+        // Может ли фигура идти прямо
+        private bool CanStraightMove()
+        {
+            Square at = FigureMoving.From;
+            do
+            {
+                at = new Square(at.x + FigureMoving.SignX, at.y + FigureMoving.SignY); // Двигается на клетку в сторону
+                if (at == FigureMoving.To) // Если пришли на нужную, то тру
+                {
+                    return true;
+                }
+            } while (at.OnBoard() && Board.GetFigureAt(at) == Figure.none); // Двигаемся пока клетка на доске и впереди нет фигур
+            return false;
+        }
+
+        private bool CanBishopMove()
+        {
+            return false;
+        }
+
+        private bool CanQueenMove()
+        {
+            return false;
+        }
+
+        private bool CanPawnMove()
+        {
+            return false;
         }
     }
 }

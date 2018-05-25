@@ -75,6 +75,17 @@ namespace ChessProject
             }
         }
 
+        public IEnumerable<FigureOnSquare> YieldFigures()
+        {
+            foreach(Square square in Square.YieldSquares()) // Для каждого квадрата
+            {
+                if (GetFigureAt(square).GetColor() == MoveColor) // Если данная фигура цвета текущего хода 
+                {
+                    yield return new FigureOnSquare(GetFigureAt(square), square); // возвращаем ее
+                }
+            }
+        }
+
         // Устанавливает фигуру, вызывается только из Init во время нового хода
         private void SetFigureAt(Square square, Figure figure)
         {

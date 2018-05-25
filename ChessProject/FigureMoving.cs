@@ -29,5 +29,69 @@ namespace ChessProject
             this.To = new Square(move.Substring(3, 2));
             this.Promotion = (move.Length == 6) ? (Figure)move[5] : Figure.none;
         }
+
+
+        // Разница между исходным и конечным положением фигуры
+        public int DeltaX {
+            get
+            {
+                return To.x - From.x;
+            }
+        }
+
+        public int DeltaY
+        {
+            get
+            {
+                return To.y - From.y;
+            }
+        }
+
+        // Абсолютные показатели разницы
+        public int AbsDeltaX
+        {
+            get
+            {
+                return Math.Abs(DeltaX);
+            }
+        }
+
+        public int AbsDeltaY
+        {
+            get
+            {
+                return Math.Abs(DeltaY);
+            }
+        }
+
+        // Узнаем направление движения фигуры
+        public int SignX
+        {
+            get
+            {
+                return Math.Sign(DeltaX);
+            }
+        }
+
+        public int SignY
+        {
+            get
+            {
+                return Math.Sign(DeltaY);
+            }
+        }
+
+
+        // Переопределяем ToString
+        override public string ToString()
+        {
+            string text = (char)Figure + From.Name + To.Name;
+            if (Promotion != Figure.none)
+            {
+                text += (char)Promotion;
+            }
+            return text;
+        }
+
     }
 }

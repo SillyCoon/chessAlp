@@ -12,11 +12,17 @@ namespace DemoChess
         static void Main(string[] args)
         {
 
-            Chess chess = new Chess();
+            Chess chess = new Chess("rnbqkbnr/1p1111p1/8/8/8/8/1P1111P1/RNBQKBNR w KQkq - 0 1");
             while (true)
             {
                 Console.WriteLine(chess.fen);
                 Print(ChessToAscii(chess));
+                foreach (string moves in chess.GetAllMoves())
+                {
+                    Console.Write(moves + "\n");
+                }
+                Console.WriteLine();
+                Console.Write("> ");
                 string move = Console.ReadLine();
                 if (move == "") {
                     break;
