@@ -53,15 +53,16 @@ namespace ChessProject
                     return CanStraightMove();
                 case Figure.whiteRook:
                 case Figure.blackRook:
-                    return false;
+                    return CanRookMove();
                 case Figure.whiteBishop:
                 case Figure.blackBishop:
-                    return false;
+                    return CanBishopMove();
                 case Figure.whiteKnight:
                 case Figure.blackKnight:
                     return CanKnightMove();
                 case Figure.whitePawn:
                 case Figure.blackPawn:
+                    return CanPawnMove();
                 default: return false;
             } 
         }
@@ -85,13 +86,18 @@ namespace ChessProject
             return false;
         }
 
-        // Может ли фигура идти прямо
+        private bool CanRookMove()
+        {
+            return (FigureMoving.SignX == 0 || FigureMoving.SignY == 0) && CanStraightMove();
+        }
+
+        // Может ли фигура идти прямо по диагонали
         private bool CanStraightMove()
         {
             Square at = FigureMoving.From;
             do
             {
-                at = new Square(at.x + FigureMoving.SignX, at.y + FigureMoving.SignY); // Двигается на клетку в сторону
+                at = new Square(at.x + FigureMoving.SignX, at.y + FigureMoving.SignY); // Двигается на клетку в сторону (по диагонали тоже)
                 if (at == FigureMoving.To) // Если пришли на нужную, то тру
                 {
                     return true;
@@ -102,7 +108,7 @@ namespace ChessProject
 
         private bool CanBishopMove()
         {
-            return false;
+            return (FigureMoving.SignX != 0 || FigureMoving.SignY != 0) && CanStraightMove();
         }
 
         private bool CanQueenMove()
@@ -112,6 +118,68 @@ namespace ChessProject
 
         private bool CanPawnMove()
         {
+            if (FigureMoving.From.y < 1 || FigureMoving.From.y > 6) // Не может быть на 1 и последней горизонтали
+            {
+                return false;
+            }
+            int stepY = FigureMoving.Figure.GetColor() == Color.white ? 1 : -1; // Направление белой и черной пешки
+            return CanPawnGo(stepY) ||
+                CanPawnJump(stepY) ||
+                CanPawnEat(stepY);
+
+        }
+
+        // Может ли пешка срубить фигуру
+        private bool CanPawnEat(int stepY)
+        {
+            if (Board.GetFigureAt(FigureMoving.To) != Figure.none) // На клетке есть фигура
+            {
+                if (FigureMoving.AbsDeltaX == 1) // Смещается на 1 влево или вправо
+                {
+                    if (FigureMoving.DeltaY == stepY) // Смещение равно смещению
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        
+        // Может ли пешка сходить на 2 клетки вперед
+        private bool CanPawnJump(int stepY)
+        {
+            if (Board.GetFigureAt(FigureMoving.To) == Figure.none)
+            {
+                if (FigureMoving.DeltaX == 0)
+                {
+                    if(FigureMoving.DeltaY == 2 * stepY) // Если смещение равно степ*2
+                    {
+                        if (FigureMoving.From.y == 1 || FigureMoving.From.y == 6) // Ходит со 2 линии
+                        {
+                            if(Board.GetFigureAt(new Square(FigureMoving.From.x, FigureMoving.From.y + stepY)) == Figure.none) // Не перепрыгивает фигуру
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        // Может ли пешка сходить вперед
+        private bool CanPawnGo(int stepY)
+        {
+            if (Board.GetFigureAt(FigureMoving.To) == Figure.none) // Если поле пустое
+            {
+                if (FigureMoving.DeltaX == 0) // Если идет по вертикали
+                {
+                    if(FigureMoving.DeltaY == stepY) // Если пешка идет прямо на 1 шаг
+                    {
+                        return true;
+                    }
+                }
+            }
             return false;
         }
     }
