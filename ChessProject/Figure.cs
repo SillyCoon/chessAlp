@@ -26,16 +26,27 @@ namespace ChessProject
 
     }
 
+
+    // Класс расширений для фигуры
     static class FigureMethods
     {
+        // Возвращает цвет фигуры
         public static Color GetColor (this Figure figure)
         {
             if (figure == Figure.none)
             {
                 return Color.none;
             }
-            return Color.white;
-            //return ()
+            else if (figure == Figure.whiteBishop || figure == Figure.whiteKing
+                || figure == Figure.whiteQueen|| figure == Figure.whiteKnight
+                || figure == Figure.whitePawn || figure == Figure.whiteRook)
+            {
+                return Color.white;
+            }
+            else
+            {
+                return Color.black;
+            }
         }
     }
 }

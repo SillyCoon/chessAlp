@@ -16,7 +16,7 @@ namespace DemoChess
             while (true)
             {
                 Console.WriteLine(chess.fen);
-                Console.WriteLine(ChessToAscii(chess));
+                Print(ChessToAscii(chess));
                 string move = Console.ReadLine();
                 if (move == "") {
                     break;
@@ -42,5 +42,28 @@ namespace DemoChess
             text += "    a b c d e f g h\n";
             return text;
         }
+
+        static void Print(string field)
+        {
+            ConsoleColor oldColor = Console.ForegroundColor;
+            foreach (char x in field)
+            {
+                if (x >= 'a' && x <= 'z')
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else if (x >= 'A' && x <= 'Z')
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                }
+                Console.Write(x);
+            }
+            Console.ForegroundColor = oldColor;
+        }
+
     }
 }

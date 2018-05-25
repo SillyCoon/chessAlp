@@ -119,6 +119,7 @@ namespace ChessProject
         // Метод хода, создаем новую доску с измененным положением фигур
         public Board Move (FigureMoving fm)
         {
+
             Board next = new Board(Fen); // Новая доска с тем же феном 
             next.SetFigureAt(fm.From, Figure.none); // Удаляем фигуру с прошлой клетки
             next.SetFigureAt(fm.To, fm.Promotion == Figure.none ? fm.Figure : fm.Promotion); // Двигаем фигуру (или еще и повышаем)
